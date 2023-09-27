@@ -61,19 +61,19 @@ struct memory_ptr {
 };
 
 memory_ptr player_resource_hack_ptr = {
-		0x4CCCAA0,
+		0x4D6ABC0,
 			1,
 	{0x4DC}
 };
 
 memory_ptr money_hack_ptr = {
-		0x4CCCB70,
+		0x4D6CD44,
 			0,
 	{ 0x0 }
 };
 
 memory_ptr ammo_resource_hack_ptr = {
-		0x4CCCAA0,
+		0x4D6ABC0,
 			1,
 	{0x6C8}
 };
