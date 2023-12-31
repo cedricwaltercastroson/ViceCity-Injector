@@ -12,6 +12,7 @@ float MAX_HP = 200.0f;
 float MAX_ARMOR = 200.0f;
 signed long int MAX_MONEY = 2147483647;
 int NEVERWANTED = 0;
+int MAX_AMMO = 99999;
 
 struct player_resource {
 	float HP;
@@ -28,6 +29,30 @@ struct stamina_resource {
 
 struct wantedlevel_resource {
 	int WANTEDLEVEL;
+};
+
+struct pistol_resource {
+	int PISTOL;
+};
+
+struct smg_resource {
+	int SMG;
+};
+
+struct ar_resource {
+	int AR;
+};
+
+struct shotgun_resource {
+	int SHOTGUN;
+};
+
+struct sniper_resource {
+	int SNIPER;
+};
+
+struct hweapon_resource {
+	int HWEAPON;
 };
 
 struct memory_ptr {
@@ -60,11 +85,53 @@ memory_ptr wantedlevel_hack_ptr = {
 	{ 0x8E0, 0x20 }
 };
 
+memory_ptr pistol_hack_ptr = {
+		0x4D6EC30,
+			1,
+	{ 0x64C }
+};
+
+memory_ptr smg_hack_ptr = {
+		0x4D6EC30,
+			1,
+	{ 0x68C }
+};
+
+memory_ptr ar_hack_ptr = {
+		0x4D6EC30,
+			1,
+	{ 0x6AC }
+};
+
+memory_ptr shotgun_hack_ptr = {
+		0x4D6EC30,
+			1,
+	{ 0x66C }
+};
+
+memory_ptr sniper_hack_ptr = {
+		0x4D6EC30,
+			1,
+	{ 0x6EC }
+};
+
+memory_ptr hweapon_hack_ptr = {
+		0x4D6EC30,
+			1,
+	{ 0x6CC }
+};
+
 //pointer to resource struct
 player_resource* player_resource_hack;
 money_resource* money_resource_hack;
 stamina_resource* stamina_resource_hack;
 wantedlevel_resource* wantedlevel_hack;
+pistol_resource* pistol_resource_hack;
+smg_resource* smg_resource_hack;
+ar_resource* ar_resource_hack;
+shotgun_resource* shotgun_resource_hack;
+sniper_resource* sniper_resource_hack;
+hweapon_resource* hweapon_resource_hack;
 
 // get module base address
 HMODULE getBaseAddress() {
@@ -86,6 +153,12 @@ void init_pointers() {
 	money_resource_hack = (money_resource*)(trace_pointer(&money_hack_ptr));
 	stamina_resource_hack = (stamina_resource*)(trace_pointer(&stamina_hack_ptr));
 	wantedlevel_hack = (wantedlevel_resource*)(trace_pointer(&wantedlevel_hack_ptr));
+	pistol_resource_hack = (pistol_resource*)(trace_pointer(&pistol_hack_ptr));
+	smg_resource_hack = (smg_resource*)(trace_pointer(&smg_hack_ptr));
+	ar_resource_hack = (ar_resource*)(trace_pointer(&ar_hack_ptr));
+	shotgun_resource_hack = (shotgun_resource*)(trace_pointer(&shotgun_hack_ptr));
+	sniper_resource_hack = (sniper_resource*)(trace_pointer(&sniper_hack_ptr));
+	hweapon_resource_hack = (hweapon_resource*)(trace_pointer(&hweapon_hack_ptr));
 }
 
 void GODMODE() {
@@ -93,6 +166,30 @@ void GODMODE() {
 	player_resource_hack->ARMOR = (float)MAX_ARMOR;
 	stamina_resource_hack->STAMINA = (bool)1;
 	wantedlevel_hack->WANTEDLEVEL = (int)NEVERWANTED;
+}
+
+void PISTOL() {
+	pistol_resource_hack->PISTOL = (int)MAX_AMMO;
+}
+
+void SMG() {
+	smg_resource_hack->SMG = (int)MAX_AMMO;
+}
+
+void AR() {
+	ar_resource_hack->AR = (int)MAX_AMMO;
+}
+
+void SHOTGUN() {
+	shotgun_resource_hack->SHOTGUN = (int)MAX_AMMO;
+}
+
+void SNIPER() {
+	sniper_resource_hack->SNIPER = (int)MAX_AMMO;
+}
+
+void HWEAPON() {
+	hweapon_resource_hack->HWEAPON = (int)MAX_AMMO;
 }
 
 void IHAVETHEMONEYSONNY() {
@@ -148,12 +245,12 @@ DWORD WINAPI MainThread(LPVOID param) {
 			TriggerCheat(cheat4);
 		}
 
-		if (GetAsyncKeyState(0x35) & 1) { // Trigger for forth cheat
+		if (GetAsyncKeyState(0x35) & 1) { // Trigger for fifth cheat
 			const char* cheat5 = "NUTTERTOOLS";
 			TriggerCheat(cheat5);
 		}
 
-		if (GetAsyncKeyState(0x36) & 1) { // Trigger for forth cheat
+		if (GetAsyncKeyState(0x36) & 1) { // Trigger for sixth cheat
 			const char* cheat6 = "BIGBANG";
 			TriggerCheat(cheat6);
 		}
@@ -166,6 +263,43 @@ DWORD WINAPI MainThread(LPVOID param) {
 				}
 			}
 		}
+
+		if (pistol_resource_hack != NULL) {
+			if (pistol_resource_hack->PISTOL < MAX_AMMO) {
+				PISTOL();
+			}
+		}
+
+		if (smg_resource_hack != NULL) {
+			if (smg_resource_hack->SMG < MAX_AMMO) {
+				SMG();
+			}
+		}
+
+		if (ar_resource_hack != NULL) {
+			if (ar_resource_hack->AR < MAX_AMMO) {
+				AR();
+			}
+		}
+
+		if (shotgun_resource_hack != NULL) {
+			if (shotgun_resource_hack->SHOTGUN < MAX_AMMO) {
+				SHOTGUN();
+			}
+		}
+
+		if (sniper_resource_hack != NULL) {
+			if (sniper_resource_hack->SNIPER < MAX_AMMO) {
+				SNIPER();
+			}
+		}
+
+		if (hweapon_resource_hack != NULL) {
+			if (hweapon_resource_hack->HWEAPON < MAX_AMMO) {
+				HWEAPON();
+			}
+		}
+
 		if (money_resource_hack != NULL) {
 			if (money_resource_hack->MONEY < MAX_MONEY){
 				IHAVETHEMONEYSONNY();
