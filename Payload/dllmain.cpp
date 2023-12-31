@@ -35,7 +35,7 @@ struct memory_ptr {
 	int total_offsets;
 	int offsets[];
 };
-// Static base address pointers below are for v1.0.17.39540
+
 memory_ptr player_resource_hack_ptr = {
 		0x4D6EC30,
 			1,
@@ -148,12 +148,12 @@ DWORD WINAPI MainThread(LPVOID param) {
 			TriggerCheat(cheat4);
 		}
 
-		if (GetAsyncKeyState(0x34) & 1) { // Trigger for forth cheat
+		if (GetAsyncKeyState(0x35) & 1) { // Trigger for forth cheat
 			const char* cheat5 = "NUTTERTOOLS";
 			TriggerCheat(cheat5);
 		}
 
-		if (GetAsyncKeyState(0x34) & 1) { // Trigger for forth cheat
+		if (GetAsyncKeyState(0x36) & 1) { // Trigger for forth cheat
 			const char* cheat6 = "BIGBANG";
 			TriggerCheat(cheat6);
 		}
