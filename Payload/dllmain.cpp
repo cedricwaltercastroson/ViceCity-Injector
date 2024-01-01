@@ -12,7 +12,7 @@ float MAX_HP = 200.0f;
 float MAX_ARMOR = 200.0f;
 signed long int MAX_MONEY = 2147483647;
 int NEVERWANTED = 0;
-int MAX_AMMO = 99999;
+int MAX_AMMO = 9999;
 
 struct player_resource {
 	float HP;
@@ -35,12 +35,24 @@ struct pistol_resource {
 	int PISTOL;
 };
 
+struct pistol_bullets_resource {
+	int PISTOL_BULLETS;
+};
+
 struct smg_resource {
 	int SMG;
 };
 
+struct smg_bullets_resource {
+	int SMG_BULLETS;
+};
+
 struct ar_resource {
 	int AR;
+};
+
+struct ar_bullets_resource {
+	int AR_BULLETS;
 };
 
 struct shotgun_resource {
@@ -53,6 +65,10 @@ struct sniper_resource {
 
 struct hweapon_resource {
 	int HWEAPON;
+};
+
+struct hweapon_bullets_resource {
+	int HWEAPON_BULLETS;
 };
 
 struct memory_ptr {
@@ -91,16 +107,34 @@ memory_ptr pistol_hack_ptr = {
 	{ 0x64C }
 };
 
+memory_ptr pistol_bullets_hack_ptr = {
+		0x4D6EC30,
+			1,
+	{ 0x648 }
+};
+
 memory_ptr smg_hack_ptr = {
 		0x4D6EC30,
 			1,
 	{ 0x68C }
 };
 
+memory_ptr smg_bullets_hack_ptr = {
+		0x4D6EC30,
+			1,
+	{ 0x688 }
+};
+
 memory_ptr ar_hack_ptr = {
 		0x4D6EC30,
 			1,
 	{ 0x6AC }
+};
+
+memory_ptr ar_bullets_hack_ptr = {
+		0x4D6EC30,
+			1,
+	{ 0x6A8 }
 };
 
 memory_ptr shotgun_hack_ptr = {
@@ -121,17 +155,27 @@ memory_ptr hweapon_hack_ptr = {
 	{ 0x6CC }
 };
 
+memory_ptr hweapon_bullets_hack_ptr = {
+		0x4D6EC30,
+			1,
+	{ 0x6C8 }
+};
+
 //pointer to resource struct
 player_resource* player_resource_hack;
 money_resource* money_resource_hack;
 stamina_resource* stamina_resource_hack;
 wantedlevel_resource* wantedlevel_hack;
 pistol_resource* pistol_resource_hack;
+pistol_bullets_resource* pistol_bullets_resource_hack;
 smg_resource* smg_resource_hack;
+smg_bullets_resource* smg_bullets_resource_hack;
 ar_resource* ar_resource_hack;
+ar_bullets_resource* ar_bullets_resource_hack;
 shotgun_resource* shotgun_resource_hack;
 sniper_resource* sniper_resource_hack;
 hweapon_resource* hweapon_resource_hack;
+hweapon_bullets_resource* hweapon_bullets_resource_hack;
 
 // get module base address
 HMODULE getBaseAddress() {
@@ -154,11 +198,15 @@ void init_pointers() {
 	stamina_resource_hack = (stamina_resource*)(trace_pointer(&stamina_hack_ptr));
 	wantedlevel_hack = (wantedlevel_resource*)(trace_pointer(&wantedlevel_hack_ptr));
 	pistol_resource_hack = (pistol_resource*)(trace_pointer(&pistol_hack_ptr));
+	pistol_bullets_resource_hack = (pistol_bullets_resource*)(trace_pointer(&pistol_bullets_hack_ptr));
 	smg_resource_hack = (smg_resource*)(trace_pointer(&smg_hack_ptr));
+	smg_bullets_resource_hack = (smg_bullets_resource*)(trace_pointer(&smg_bullets_hack_ptr));
 	ar_resource_hack = (ar_resource*)(trace_pointer(&ar_hack_ptr));
+	ar_bullets_resource_hack = (ar_bullets_resource*)(trace_pointer(&ar_bullets_hack_ptr));
 	shotgun_resource_hack = (shotgun_resource*)(trace_pointer(&shotgun_hack_ptr));
 	sniper_resource_hack = (sniper_resource*)(trace_pointer(&sniper_hack_ptr));
 	hweapon_resource_hack = (hweapon_resource*)(trace_pointer(&hweapon_hack_ptr));
+	hweapon_bullets_resource_hack = (hweapon_bullets_resource*)(trace_pointer(&hweapon_bullets_hack_ptr));
 }
 
 void GODMODE() {
@@ -170,14 +218,17 @@ void GODMODE() {
 
 void PISTOL() {
 	pistol_resource_hack->PISTOL = (int)MAX_AMMO;
+	pistol_bullets_resource_hack->PISTOL_BULLETS = (int)MAX_AMMO;
 }
 
 void SMG() {
 	smg_resource_hack->SMG = (int)MAX_AMMO;
+	smg_bullets_resource_hack->SMG_BULLETS = (int)MAX_AMMO;
 }
 
 void AR() {
 	ar_resource_hack->AR = (int)MAX_AMMO;
+	ar_bullets_resource_hack->AR_BULLETS = (int)MAX_AMMO;
 }
 
 void SHOTGUN() {
@@ -190,6 +241,7 @@ void SNIPER() {
 
 void HWEAPON() {
 	hweapon_resource_hack->HWEAPON = (int)MAX_AMMO;
+	hweapon_bullets_resource_hack->HWEAPON_BULLETS = (int)MAX_AMMO;
 }
 
 void IHAVETHEMONEYSONNY() {
@@ -258,26 +310,26 @@ DWORD WINAPI MainThread(LPVOID param) {
 		//these gets triggered when the pointers are valid via pressing `~
 		if (player_resource_hack != NULL) {
 			if (player_resource_hack->HP != NULL) {
-				if (player_resource_hack->HP != MAX_HP || player_resource_hack->ARMOR != MAX_ARMOR || wantedlevel_hack->WANTEDLEVEL != NEVERWANTED ) {
+				if (player_resource_hack->HP < MAX_HP || player_resource_hack->ARMOR < MAX_ARMOR || wantedlevel_hack->WANTEDLEVEL > NEVERWANTED ) {
 					GODMODE();
 				}
 			}
 		}
 
 		if (pistol_resource_hack != NULL) {
-			if (pistol_resource_hack->PISTOL < MAX_AMMO) {
+			if (pistol_resource_hack->PISTOL < MAX_AMMO || pistol_bullets_resource_hack->PISTOL_BULLETS < MAX_AMMO) {
 				PISTOL();
 			}
 		}
 
 		if (smg_resource_hack != NULL) {
-			if (smg_resource_hack->SMG < MAX_AMMO) {
+			if (smg_resource_hack->SMG < MAX_AMMO || smg_bullets_resource_hack->SMG_BULLETS < MAX_AMMO) {
 				SMG();
 			}
 		}
 
 		if (ar_resource_hack != NULL) {
-			if (ar_resource_hack->AR < MAX_AMMO) {
+			if (ar_resource_hack->AR < MAX_AMMO || ar_bullets_resource_hack->AR_BULLETS < MAX_AMMO) {
 				AR();
 			}
 		}
@@ -295,7 +347,7 @@ DWORD WINAPI MainThread(LPVOID param) {
 		}
 
 		if (hweapon_resource_hack != NULL) {
-			if (hweapon_resource_hack->HWEAPON < MAX_AMMO) {
+			if (hweapon_resource_hack->HWEAPON < MAX_AMMO || hweapon_bullets_resource_hack->HWEAPON_BULLETS < MAX_AMMO) {
 				HWEAPON();
 			}
 		}
