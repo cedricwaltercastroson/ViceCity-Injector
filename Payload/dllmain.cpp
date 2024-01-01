@@ -59,8 +59,16 @@ struct shotgun_resource {
 	int SHOTGUN;
 };
 
+struct shotgun_bullets_resource {
+	int SHOTGUN_BULLETS;
+};
+
 struct sniper_resource {
 	int SNIPER;
+};
+
+struct sniper_bullets_resource {
+	int SNIPER_BULLETS;
 };
 
 struct hweapon_resource {
@@ -143,10 +151,22 @@ memory_ptr shotgun_hack_ptr = {
 	{ 0x66C }
 };
 
+memory_ptr shotgun_bullets_hack_ptr = {
+		0x4D6EC30,
+			1,
+	{ 0x668 }
+};
+
 memory_ptr sniper_hack_ptr = {
 		0x4D6EC30,
 			1,
 	{ 0x6EC }
+};
+
+memory_ptr sniper_bullets_hack_ptr = {
+		0x4D6EC30,
+			1,
+	{ 0x6E8 }
 };
 
 memory_ptr hweapon_hack_ptr = {
@@ -173,7 +193,9 @@ smg_bullets_resource* smg_bullets_resource_hack;
 ar_resource* ar_resource_hack;
 ar_bullets_resource* ar_bullets_resource_hack;
 shotgun_resource* shotgun_resource_hack;
+shotgun_bullets_resource* shotgun_bullets_resource_hack;
 sniper_resource* sniper_resource_hack;
+sniper_bullets_resource* sniper_bullets_resource_hack;
 hweapon_resource* hweapon_resource_hack;
 hweapon_bullets_resource* hweapon_bullets_resource_hack;
 
@@ -204,7 +226,9 @@ void init_pointers() {
 	ar_resource_hack = (ar_resource*)(trace_pointer(&ar_hack_ptr));
 	ar_bullets_resource_hack = (ar_bullets_resource*)(trace_pointer(&ar_bullets_hack_ptr));
 	shotgun_resource_hack = (shotgun_resource*)(trace_pointer(&shotgun_hack_ptr));
+	shotgun_bullets_resource_hack = (shotgun_bullets_resource*)(trace_pointer(&shotgun_bullets_hack_ptr));
 	sniper_resource_hack = (sniper_resource*)(trace_pointer(&sniper_hack_ptr));
+	sniper_bullets_resource_hack = (sniper_bullets_resource*)(trace_pointer(&sniper_bullets_hack_ptr));
 	hweapon_resource_hack = (hweapon_resource*)(trace_pointer(&hweapon_hack_ptr));
 	hweapon_bullets_resource_hack = (hweapon_bullets_resource*)(trace_pointer(&hweapon_bullets_hack_ptr));
 }
@@ -233,10 +257,12 @@ void AR() {
 
 void SHOTGUN() {
 	shotgun_resource_hack->SHOTGUN = (int)MAX_AMMO;
+	shotgun_bullets_resource_hack->SHOTGUN_BULLETS = (int)MAX_AMMO;
 }
 
 void SNIPER() {
 	sniper_resource_hack->SNIPER = (int)MAX_AMMO;
+	sniper_bullets_resource_hack->SNIPER_BULLETS = (int)MAX_AMMO;
 }
 
 void HWEAPON() {
@@ -335,13 +361,13 @@ DWORD WINAPI MainThread(LPVOID param) {
 		}
 
 		if (shotgun_resource_hack != NULL) {
-			if (shotgun_resource_hack->SHOTGUN < MAX_AMMO) {
+			if (shotgun_resource_hack->SHOTGUN < MAX_AMMO || shotgun_bullets_resource_hack->SHOTGUN_BULLETS < MAX_AMMO) {
 				SHOTGUN();
 			}
 		}
 
 		if (sniper_resource_hack != NULL) {
-			if (sniper_resource_hack->SNIPER < MAX_AMMO) {
+			if (sniper_resource_hack->SNIPER < MAX_AMMO || sniper_bullets_resource_hack->SNIPER_BULLETS < MAX_AMMO) {
 				SNIPER();
 			}
 		}
