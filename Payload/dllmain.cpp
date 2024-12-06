@@ -10,7 +10,7 @@
 
 float MAX_HP = 200.0f;
 float MAX_ARMOR = 200.0f;
-signed long int MAX_MONEY = 2147483647;
+signed long int MAX_MONEY = 999999999;
 int NEVERWANTED = 0;
 int MAX_AMMO = 9999;
 
@@ -86,99 +86,99 @@ struct memory_ptr {
 };
 
 memory_ptr player_resource_hack_ptr = {
-		0x4D6EC30,
+		0x4E2A628,
 			1,
-	{0x4DC}
+	{0x4E4}
 };
 
 memory_ptr money_hack_ptr = {
-		0x4D6ED00,
+		0x5247B80,
 			0,
 	{ 0x0 }
 };
 
 memory_ptr stamina_hack_ptr = {
-		0x4D6EDA4,
+		0x5247C24,
 			0,
 	{ 0x0 }
 };
 
 memory_ptr wantedlevel_hack_ptr = {
-		0x4D6EC30,
+		0x4E2A628,
 			2,
-	{ 0x8E0, 0x20 }
+	{ 0x898, 0x20 }
 };
 
 memory_ptr pistol_hack_ptr = {
-		0x4D6EC30,
+		0x4E2A628,
 			1,
-	{ 0x64C }
+	{ 0x650 }
 };
 
 memory_ptr pistol_bullets_hack_ptr = {
-		0x4D6EC30,
+		0x4E2A628,
 			1,
-	{ 0x648 }
+	{ 0x654 }
 };
 
 memory_ptr smg_hack_ptr = {
-		0x4D6EC30,
+		0x4E2A628,
 			1,
-	{ 0x68C }
+	{ 0x690 }
 };
 
 memory_ptr smg_bullets_hack_ptr = {
-		0x4D6EC30,
+		0x4E2A628,
 			1,
-	{ 0x688 }
+	{ 0x694 }
 };
 
 memory_ptr ar_hack_ptr = {
-		0x4D6EC30,
+		0x4E2A628,
 			1,
-	{ 0x6AC }
+	{ 0x6B0 }
 };
 
 memory_ptr ar_bullets_hack_ptr = {
-		0x4D6EC30,
+		0x4E2A628,
 			1,
-	{ 0x6A8 }
+	{ 0x6B4 }
 };
 
 memory_ptr shotgun_hack_ptr = {
-		0x4D6EC30,
+		0x4E2A628,
 			1,
-	{ 0x66C }
+	{ 0x670 }
 };
 
 memory_ptr shotgun_bullets_hack_ptr = {
-		0x4D6EC30,
+		0x4E2A628,
 			1,
-	{ 0x668 }
+	{ 0x674 }
 };
 
 memory_ptr sniper_hack_ptr = {
-		0x4D6EC30,
+		0x4E2A628,
 			1,
-	{ 0x6EC }
+	{ 0x6F0 }
 };
 
 memory_ptr sniper_bullets_hack_ptr = {
-		0x4D6EC30,
+		0x4E2A628,
 			1,
-	{ 0x6E8 }
+	{ 0x6F4 }
 };
 
 memory_ptr hweapon_hack_ptr = {
-		0x4D6EC30,
+		0x4E2A628,
 			1,
-	{ 0x6CC }
+	{ 0x6D0 }
 };
 
 memory_ptr hweapon_bullets_hack_ptr = {
-		0x4D6EC30,
+		0x4E2A628,
 			1,
-	{ 0x6C8 }
+	{ 0x6D0 }
 };
 
 //pointer to resource struct
