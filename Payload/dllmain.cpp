@@ -8,11 +8,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+bool TrainerActive = false;
+
+DWORD64* playing_now_ptr = nullptr;
+
 float MAX_HP = 200.0f;
 float MAX_ARMOR = 200.0f;
 signed long int MAX_MONEY = 999999999;
 int NEVERWANTED = 0;
-int MAX_AMMO = 9999;
+int MAX_AMMO = 500;
 
 struct player_resource {
 	float HP;
@@ -83,6 +87,12 @@ struct memory_ptr {
 	DWORD64 base_address;
 	int total_offsets;
 	int offsets[];
+};
+
+memory_ptr playing_ptr = {
+		0x4E2A4D0,
+			0,
+	{0x0}
 };
 
 memory_ptr player_resource_hack_ptr = {
@@ -215,6 +225,7 @@ DWORD64* trace_pointer(memory_ptr* hack) {
 }
 
 void init_pointers() {
+	playing_now_ptr = trace_pointer(&playing_ptr);
 	player_resource_hack = (player_resource*)(trace_pointer(&player_resource_hack_ptr));
 	money_resource_hack = (money_resource*)(trace_pointer(&money_hack_ptr));
 	stamina_resource_hack = (stamina_resource*)(trace_pointer(&stamina_hack_ptr));
@@ -291,16 +302,23 @@ void TriggerCheat(const char* cheatCode) {
 		in[i * 2 + 1].ki.dwFlags = KEYEVENTF_KEYUP;
 	}
 
-	UINT uS = SendInput(max_input, in, sizeof(INPUT));
+	UINT uS = SendInput((UINT)max_input, in, sizeof(INPUT));
 
 	free(in);
 }
 
 DWORD WINAPI MainThread(LPVOID param) {
 	while (true) {
-		if (GetAsyncKeyState(0xC0) & 1) {  //enables the goodstuff.. godmode, money
-				init_pointers();
-				Beep(1000, 500);
+
+		if (GetAsyncKeyState(0xC0) & 1) {  // '`~' key, ASCII code 0xC0
+			TrainerActive = !TrainerActive;  // Toggle the trainer active state
+			if (TrainerActive) {
+				init_pointers();  // Initialize the pointers when the trainer is activated
+				Beep(1000, 500);  // Optional: feedback sound for initialization
+			}
+			else {
+				Beep(500, 500);  // Feedback sound when deactivated
+			}
 		}
 
 		if (GetAsyncKeyState(0x31) & 1) { // Trigger for first cheat
@@ -333,11 +351,12 @@ DWORD WINAPI MainThread(LPVOID param) {
 			TriggerCheat(cheat6);
 		}
 
-		//these gets triggered when the pointers are valid via pressing `~
-		if (player_resource_hack != NULL) {
+		// Only trigger cheats if the trainer is active and ensure memory pointers are valid before applying cheats
+		if (TrainerActive && playing_now_ptr != NULL) {
 			if (player_resource_hack->HP != NULL) {
-				if (player_resource_hack->HP < MAX_HP || player_resource_hack->ARMOR < MAX_ARMOR || wantedlevel_hack->WANTEDLEVEL > NEVERWANTED ) {
-					GODMODE();
+				// Check if the trainer should be activated (including GODMODE)
+				if (player_resource_hack->HP < MAX_HP || player_resource_hack->ARMOR < MAX_ARMOR || wantedlevel_hack->WANTEDLEVEL > NEVERWANTED) {
+					GODMODE();  // Enable GODMODE if conditions are met
 				}
 			}
 		}
